@@ -1,7 +1,7 @@
 include config.mk
 
 %.o: %.asm
-	$(NASM) -f elf64 $< -o $@
+	$(NASM) -f $(ARCH64) $< -o $@
 
 test_c: test.o sobel_c.o
 	$(CC) -lm $^ -o $@

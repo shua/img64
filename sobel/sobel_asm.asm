@@ -1,6 +1,7 @@
 section .text
-	global sobel
-sobel:
+	global _sobel
+
+_sobel:
 	.cols	equ	0
 	.rows	equ	8
 	.output equ	16
@@ -22,11 +23,11 @@ sobel:
 	mov	[rsp+.output], rsi
 	mov	[rsp+.rows], rdx
 	mov	[rsp+.cols], rcx
-	mov	[rsp+.bipr], rcx
+	mov	[rsp+.bpir], rcx
 	imul	rcx, 4
 	mov	[rsp+.bpor], rcx
 	
-	mov	rax, [rsp+.row]
+	mov	rax, [rsp+.rows]
 	mov	rdx, [rsp+.cols]
 	sub	rax, 2
 	mov	r8, [rsp+.input]
@@ -47,12 +48,12 @@ sobel:
 	pxor	xmm9, xmm9
 	pxor	xmm10, xmm10
 	pxor	xmm11, xmm11
-	pxor	xmm12m xmm12
+	pxor	xmm12, xmm12
 	psrldq	xmm1, 1 ; shift pixel 1 to right
 	psrldq	xmm2, 2 ; shift pixel 2 to right
 			; low 14 values of xmm0
 			; xmm1, and xmm2 are lined
-	movdqa	xmm3, xmm
+	movdqa	xmm3, xmm0
 	movdqa	xmm4, xmm1
 	movdqa	xmm5, xmm2
 	punpcklbw xmm3, xmm13 ;low 8 values are now words
@@ -117,7 +118,7 @@ sobel:
 	paddw	xmm12, xmm2
 	paddw	xmm10, xmm1
 	paddw	xmm10, xmm1
-'	paddw	xmm10, xmm2
+	paddw	xmm10, xmm2
 
 	pmullw	xmm9, xmm9
 	pmullw  xmm10, xmm10
