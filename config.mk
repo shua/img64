@@ -1,3 +1,3 @@
 NASM = yasm
 CFLAGS += -I../
-ARCH = elf64
+ARCH64 = elf64
