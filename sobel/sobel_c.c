@@ -1,3 +1,4 @@
+#include <math.h>
 #define I(a,b,c) a[(b)*(cols*3)+((c)*3)+(d)]
 #define MIN(a,b) (((a)>(b))?(b):(a))
 
