@@ -25,7 +25,7 @@ int main(int argv, char** argc){
 	int x,y,n,i;
 	unsigned char *data = stbi_load("./a.jpg", &x, &y, &n, 0);
 	unsigned char *final = calloc(x*y, n);
-	
+	printf("good thus far\n");	
 	sobel(data, final, y, x);
 	/*for(i=0;i<x;i++){
 		if(!(i%3)){

@@ -1,7 +1,10 @@
 section .text
 	global _sobel
+	extern _printf
 
 _sobel:
+	sub	rsp, 8 ; the return address sits on the stack so we align to 
+		       ; 16 byte by sub the difference of 8 byte on the stack
 	.cols	equ	0
 	.rows	equ	8
 	.output equ	16
@@ -26,7 +29,7 @@ _sobel:
 	mov	[rsp+.bpir], rcx
 	imul	rcx, 4
 	mov	[rsp+.bpor], rcx
-	
+ 	
 	mov	rax, [rsp+.rows]
 	mov	rdx, [rsp+.cols]
 	sub	rax, 2
@@ -140,9 +143,17 @@ _sobel:
 	sqrtps	xmm1, xmm1
 	sqrtps  xmm2, xmm2
 	sqrtps  xmm3, xmm3
+
 	movups	[rsi+rbx*4], xmm0
 	movups  [rsi+rbx*4+16], xmm1
 	movups	[rsi+rbx*4+32], xmm2
+
+	
+	mov	rdi, sentence
+	call	_printf
+
+
+
 	movups	[rsi+rbx*4+48], xmm3
 
 	add	rbx, 14
@@ -155,7 +166,8 @@ _sobel:
 	sub	rax, 1
 	cmp	rax, 0
 	jg	.more_rows
-.noworktodo
+	
+.noworktodo:
 	add	rsp, 48
 	pop	rbx
 	pop	rbp
@@ -164,3 +176,6 @@ _sobel:
 	pop	r14
 	pop	r15
 	ret
+
+section .data
+	sentence dq "aaaaaaac", 0x0a, 0
