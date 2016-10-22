@@ -1,0 +1,2 @@
+NASM = yasm
+CFLAGS += -I../
