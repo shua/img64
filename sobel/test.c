@@ -20,6 +20,8 @@
 
 char* argv0;
 
+const int comp = STBI_rgb;
+
 void sobel (unsigned char *data, unsigned char* out, long rows, long cols);
 
 void usage() {
@@ -47,7 +49,7 @@ int main(int argc, char** argv){
 		break;
 	}
 
-	data = stbi_load(infile, &x, &y, &n, 0);
+	data = stbi_load(infile, &x, &y, &n, comp);
 	final = calloc(x*y, n);
 	
 	sobel(data, final, y, x);
