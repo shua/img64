@@ -3,7 +3,7 @@ include ../config.mk
 all: sobel_c sobel_asm
 
 %.o: %.asm
-	$(NASM) -f $(ARCH64) $< -o $@
+	$(NASM) $(NASMFLAGS) $< -o $@
 
 sobel_c: test.o sobel_c.o
 	$(CC) -lm $^ -o $@

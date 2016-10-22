@@ -1,8 +1,8 @@
 section .text
-	global _sobel
-	extern _printf
+	global sobel
+	extern printf
 
-_sobel:
+sobel:
 	sub	rsp, 8 ; the return address sits on the stack so we align to 
 		       ; 16 byte by sub the difference of 8 byte on the stack
 	.cols	equ	0
@@ -150,7 +150,7 @@ _sobel:
 
 	
 	mov	rdi, sentence
-	call	_printf
+	call	printf
 
 
 

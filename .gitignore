@@ -1,6 +1,6 @@
 .DS_Store
 *.o
-test_c
-test_asm
+*_c
+*_asm
 config.mk
 *.bmp
