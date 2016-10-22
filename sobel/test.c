@@ -10,31 +10,48 @@
 //    stbi_image_free(data)
 
 
-#include <math.h>
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 //this line needs to be defined before the include 
 
+#include <stdio.h>
 #include "stb_image.h"
 #include "stb_image_write.h"
 
+char* argv0;
+
 void sobel (unsigned char *data, unsigned char* out, long rows, long cols);
 
-int main(int argv, char** argc){
+void usage() {
+	printf("usage: %s FILE [OUT]\n", argv0);
+	exit(1);
+}
 
+int main(int argc, char** argv){
 	int x,y,n,i;
-	unsigned char *data = stbi_load("./a.jpg", &x, &y, &n, 0);
-	unsigned char *final = calloc(x*y, n);
-	printf("good thus far\n");	
+
+	unsigned char *data;
+	unsigned char *final;
+	char *infile,*outfile;
+
+	argv0 = argv[0];
+	switch(argc) {
+	case 1: usage();
+	case 2: 
+		infile=argv[1]; 
+		outfile="out.bmp";
+		break;
+	default: 
+		infile=argv[1]; 
+		outfile=argv[2]; 
+		break;
+	}
+
+	data = stbi_load(infile, &x, &y, &n, 0);
+	final = calloc(x*y, n);
+	
 	sobel(data, final, y, x);
-	/*for(i=0;i<x;i++){
-		if(!(i%3)){
-			printf("\n");
-		}
-		printf("%hhx, ", *(data+i));
-		printf("%hhx, ", *(final+i));
-	}*/
-	char *file = "./b.bmp";
- 	stbi_write_bmp(file, x, y, n, final);
+
+ 	stbi_write_bmp(outfile, x, y, n, final);
 	return 0;
 }
