@@ -43,7 +43,7 @@ copy:
 	cmp rbx, rdx
 	jl .Lcols
 	add r8, rdx
-	mov rsi, r8
+	add rsi, rdx
 	sub rax, 1
 	cmp rax, 0
 	jg .Lrows
