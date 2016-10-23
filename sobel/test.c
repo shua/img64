@@ -20,9 +20,17 @@
 
 char* argv0;
 
-const int comp = STBI_rgb;
+const int comp = 4;
 
 void sobel (unsigned char *data, unsigned char* out, long rows, long cols);
+void pack_in (unsigned char *data, long rows, long cols, long depth);
+
+void pack_in (unsigned char *data, long rows, long cols, long depth) {
+	int p,i;
+	for(p=1; p<(rows*cols); p++)
+	for(i=0; i<depth; i++)
+		data[p*depth + i] = data[p*comp + i];
+}
 
 void usage() {
 	printf("usage: %s FILE [OUT]\n", argv0);
@@ -50,11 +58,10 @@ int main(int argc, char** argv){
 	}
 
 	data = stbi_load(infile, &x, &y, &n, comp);
-
-	final = calloc(x*y, n);
-
+	final = calloc(x*y, comp);
 	sobel(data, final, y, x);
+	pack_in(final, y, x, 3);
 
- 	stbi_write_bmp(outfile, x, y, n, final);
+ 	stbi_write_bmp(outfile, x, y, 3, final);
 	return 0;
 }
