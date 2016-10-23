@@ -16,9 +16,8 @@ void sobel (unsigned char *data, unsigned char* out, long rows, long cols){
 			gx = -I(data, r-1, c-1) + I(data, r-1, c+1) +
 			     -2*I(data, r, c-1) + 2*I(data, r, c+1) +
 			     -I(data, r+1, c-1) + I(data, r+1, c+1);
-			gy = -I(data, r-1, c-1) - 2*I(data, r-1, c) -
-			      I(data, r-1, c+1) + I(data, r+1, c-1) +
-			      2*I(data, r+1, c) + I(data, r+1, c+1);
+			gy = -I(data, r-1, c-1) - 2*I(data, r-1, c) - I(data, r-1, c+1) + 
+			      I(data, r+1, c-1) + 2*I(data, r+1, c) + I(data, r+1, c+1);
 			v = (float)sqrt((float)(gx) * (float)(gx)+
 					    (float)(gy) * (float)(gy));
 			I(out, r, c) = MIN(v,255);

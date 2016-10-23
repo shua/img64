@@ -30,7 +30,7 @@ void usage() {
 }
 
 int main(int argc, char** argv){
-	int x,y,n,i;
+	int x,y,n;
 
 	unsigned char *data;
 	unsigned char *final;
@@ -50,8 +50,9 @@ int main(int argc, char** argv){
 	}
 
 	data = stbi_load(infile, &x, &y, &n, comp);
+
 	final = calloc(x*y, n);
-	
+
 	sobel(data, final, y, x);
 
  	stbi_write_bmp(outfile, x, y, n, final);

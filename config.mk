@@ -1,3 +1,3 @@
 NASM = yasm
-CFLAGS += -I../
+CFLAGS += -g -I../
 NASMFLAGS += -f elf64
