@@ -16,31 +16,13 @@
 #include <stdio.h>
 #include "stb_image.h"
 #include "stb_image_write.h"
+#include "px.c"
 
 char* argv0;
 
-const int comp = 4;
+const int comp = 1;
 
 void mean (unsigned char *data, unsigned char* out, long rows, long cols);
-void unpack (unsigned char *data, unsigned char* out, long rows, long cols, long depth);
-
-void unpack (unsigned char *data, unsigned char* out, long rows, long cols, long depth) {
-	int r,c, i, j;
-
-	for(r=0; r<rows; r++)
-	for(c=0; c<cols; c++) {
-		for(i=0; i<depth; i++)
-			out[(r*cols+c)*comp + i] = data[(r*cols+c)*depth + i];
-	}
-}
-
-void pack_in (unsigned char *data, long rows, long cols, long depth) {
-	int p, q, i;
-	int m=rows*cols;
-	for(q=p=1; p<m; p++,q++)
-	for(i=0; i<depth; i++)
-		data[p*depth+i] = data[q*comp+i];
-}
 
 void usage() {
 	printf("usage: %s FILE [OUT]\n", argv0);
@@ -67,12 +49,19 @@ int main(int argc, char** argv){
 		break;
 	}
 
-	data = stbi_load(infile, &x, &y, &n, 4);
+	data = stbi_load(infile, &x, &y, &n, 3);
+	final = calloc((x+200)*(y+200), 3);
 	printf("opened %s: %d %d %d\n", infile, x, y, n);
+//	printmat(data, y, x, 3);
 
-	final = calloc(x*y, comp);
-	mean(data, final, y, x);
+	pxpad(data, final, y, x, 3, 100);
 
- 	stbi_write_bmp(outfile, x, y, 4, final);
+//	mean(data, final, y, x);
+
+//	free(data); data = final;
+//	final = calloc(x*y, 3);
+//	pxconv(data, final, x*y, 1, 3, g2rgb);
+
+ 	stbi_write_bmp(outfile, x+200, y+200, 3, final);
 	return 0;
 }
