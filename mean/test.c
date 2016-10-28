@@ -22,7 +22,7 @@ char* argv0;
 
 const int comp = 3;
 
-void mean (unsigned char *data, unsigned char* out, long rows, long cols);
+void mean (unsigned char *data, unsigned char* out, long rows, long cols, long N);
 
 void usage() {
 	printf("usage: %s FILE [OUT] [N]\n", argv0);
@@ -42,6 +42,7 @@ int main(int argc, char** argv){
 	case 2: 
 		infile=argv[1]; 
 		outfile="out.bmp";
+		N=1;
 		break;
 	case 3:
 		infile=argv[1];
@@ -65,13 +66,7 @@ int main(int argc, char** argv){
 	free(data); data = final;
 	final = calloc(x*y, 3);
 
-	mean(data, final, y, x);
-	for(i=1; i<N; i++) {
-		tmp = final;
-		final = data;
-		data = tmp;
-		mean(data, final, y, x);
-	}
+	mean(data, final, y, x, N);
 	tmp = final; final = data; data = tmp;
 
 	pxcrop(data, final, y, x, comp, N, N, x-N, y-N);
