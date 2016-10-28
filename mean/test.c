@@ -20,17 +20,17 @@
 
 char* argv0;
 
-const int comp = 1;
+const int comp = 3;
 
 void mean (unsigned char *data, unsigned char* out, long rows, long cols);
 
 void usage() {
-	printf("usage: %s FILE [OUT]\n", argv0);
+	printf("usage: %s FILE [OUT] [N]\n", argv0);
 	exit(1);
 }
 
 int main(int argc, char** argv){
-	int x,y,n,i;
+	int x,y,n,i,N;
 	unsigned char *data;
 	unsigned char *tmp;
 	unsigned char *final;
@@ -43,25 +43,43 @@ int main(int argc, char** argv){
 		infile=argv[1]; 
 		outfile="out.bmp";
 		break;
+	case 3:
+		infile=argv[1];
+		outfile=argv[2];
+		N=1;
+		break;
 	default: 
 		infile=argv[1]; 
 		outfile=argv[2]; 
+		N=atoi(argv[3]);
 		break;
 	}
 
-	data = stbi_load(infile, &x, &y, &n, 3);
-	final = calloc((x+200)*(y+200), 3);
+	data = stbi_load(infile, &x, &y, &n, comp);
+	final = calloc((x+2*N)*(y+2*N), comp);
 	printf("opened %s: %d %d %d\n", infile, x, y, n);
-//	printmat(data, y, x, 3);
 
-	pxpad(data, final, y, x, 3, 100);
+	pxpad(data, final, y, x, comp, N);
+	x+=2*N;
+	y+=2*N;
+	free(data); data = final;
+	final = calloc(x*y, 3);
 
-//	mean(data, final, y, x);
+	mean(data, final, y, x);
+	for(i=1; i<N; i++) {
+		tmp = final;
+		final = data;
+		data = tmp;
+		mean(data, final, y, x);
+	}
+	tmp = final; final = data; data = tmp;
 
-//	free(data); data = final;
-//	final = calloc(x*y, 3);
+	pxcrop(data, final, y, x, comp, N, N, x-N, y-N);
+	x-=2*N;
+	y-=2*N;
+
 //	pxconv(data, final, x*y, 1, 3, g2rgb);
 
- 	stbi_write_bmp(outfile, x+200, y+200, 3, final);
+ 	stbi_write_bmp(outfile, x, y, 3, final);
 	return 0;
 }

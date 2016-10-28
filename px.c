@@ -69,3 +69,11 @@ void pxpad (unsigned char *i, unsigned char *o, long rows, long cols, long depth
 		}
 	}
 }
+
+void pxcrop(unsigned char *i, unsigned char *o, long rows, long cols, long depth, long x1, long y1, long x2, long y2) {
+	long r, c, ri, ci;
+	for(r=0; r<y2-y1; r++)
+	for(c=0; c<x2-x1; c++)
+		cp[depth-1](i+I(r+y1,c+x1,cols), o+I(r,c,x2-x1));
+}
+#undef I
